@@ -1,0 +1,22 @@
+# DER++ with ViT-Tiny on Split-CIFAR-100
+method: der
+benchmark: split_cifar100
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 10
+
+encoder: vit_tiny
+latent_dim: 256
+img_size: 32
+patch_size: 4
+in_channels: 3
+
+# DER++-specific
+buffer_size_per_task: 500
+replay_batch_size: 64
+alpha: 1.0
+beta: 1.0
+
+# Training
+epochs: 20
+lr: 0.001

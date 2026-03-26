@@ -1,0 +1,18 @@
+# Experience Replay on Split-MNIST
+method: er
+benchmark: split_mnist
+benchmark_args:
+  classes_per_task: 2
+
+encoder: mlp
+input_dim: 784
+hidden_dim: 400
+latent_dim: 256
+
+# ER-specific
+buffer_size_per_task: 200
+replay_batch_size: 64
+
+# Training
+epochs: 10
+lr: 0.01

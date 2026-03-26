@@ -1,0 +1,19 @@
+# PackNet on Split-MNIST
+method: packnet
+benchmark: split_mnist
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 2
+
+encoder: mlp
+input_dim: 784
+hidden_dim: 400
+latent_dim: 256
+
+# PackNet-specific
+prune_ratio: 0.75
+retrain_epochs: 0
+
+# Training
+epochs: 10
+lr: 0.01

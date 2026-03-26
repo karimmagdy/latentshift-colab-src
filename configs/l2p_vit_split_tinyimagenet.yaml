@@ -1,0 +1,23 @@
+# L2P on Split-TinyImageNet with ViT-Tiny
+method: l2p
+benchmark: split_tinyimagenet
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 20
+
+encoder: vit_tiny
+latent_dim: 256
+img_size: 64
+patch_size: 8
+in_channels: 3
+
+# L2P-specific
+pool_size: 10
+prompt_length: 5
+top_k: 5
+freeze_encoder: true
+pull_weight: 0.5
+
+# Training
+epochs: 20
+lr: 0.001

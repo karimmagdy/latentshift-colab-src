@@ -1,0 +1,24 @@
+# DualPrompt on Split-CIFAR-10 with ViT-Tiny
+method: dualprompt
+benchmark: split_cifar10
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 2
+
+encoder: vit_tiny
+latent_dim: 256
+img_size: 32
+patch_size: 4
+in_channels: 3
+
+# DualPrompt-specific
+g_prompt_length: 5
+e_prompt_length: 20
+e_pool_size: 10
+top_k: 5
+g_layers: 2
+freeze_encoder: true
+
+# Training
+epochs: 20
+lr: 0.001

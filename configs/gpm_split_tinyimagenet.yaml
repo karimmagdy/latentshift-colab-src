@@ -1,0 +1,12 @@
+method: gpm
+benchmark: split_tinyimagenet
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 20
+encoder: resnet18
+small_input: false
+latent_dim: 256
+threshold: 0.99
+num_samples: 300
+epochs: 20
+lr: 0.01

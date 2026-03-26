@@ -1,0 +1,12 @@
+# Naive (fine-tuning) on Seq-CIFAR-100 (20 tasks × 5 classes)
+method: naive
+benchmark: seq_cifar100
+benchmark_args:
+  batch_size: 64
+
+encoder: resnet18
+latent_dim: 256
+
+# Training
+epochs: 20
+lr: 0.01

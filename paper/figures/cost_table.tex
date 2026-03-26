@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Wall-clock training time (seconds) per benchmark.}
+\label{tab:cost}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Split MNIST & Split CIFAR10 & Split CIFAR100 & Permuted MNIST & Split TinyImageNet \\
+\midrule
+LatentShift (Ours) & 46 & 1197 & 2244 & 800 & 3296 \\
+LatentShift-Tuned (Ours) & 225 & 2747 & 2352 & 2827 & 5579 \\
+DER++ & 381 & 8592 & 4850 & 9948 & 12696 \\
+ER & 314 & 6094 & 10155 & 5879 & 5790 \\
+GPM & 49 & 1504 & 13073 & 832 & 1189 \\
+TRGP & 171 & 2549 & 4077 & 3489 & 3243 \\
+GPM (Last Layer) & 307 & 2756 & 3122 & 2504 & 4722 \\
+EWC & 72 & 2208 & 2014 & 1649 & 2050 \\
+PackNet & 96 & 1980 & 2697 & 13843 & 2577 \\
+HAT & 41 & 2297 & 27852 & 536 & 23478 \\
+Naive & 45 & 1730 & 4916 & 811 & 1201 \\
+\bottomrule
+\end{tabular}
+\end{table}

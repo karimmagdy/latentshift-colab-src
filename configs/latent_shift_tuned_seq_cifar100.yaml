@@ -1,0 +1,18 @@
+# Tuned LatentShift on Seq-CIFAR-100 (20 tasks × 5 classes)
+method: latent_shift_tuned
+benchmark: seq_cifar100
+benchmark_args:
+  batch_size: 64
+
+encoder: resnet18
+latent_dim: 1024
+num_tasks: 50
+
+# Tuned LatentShift-specific
+threshold: 0.999
+num_samples: 500
+lossy: false
+
+# Training
+epochs: 20
+lr: 0.01

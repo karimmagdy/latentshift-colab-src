@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{Class-incremental accuracy (\%) on CIFAR benchmarks (mean $\pm$ std over 3 seeds). Single-head evaluation without task identity at inference. $\uparrow$ higher is better.}
+\label{tab:ci}
+\small
+\begin{tabular}{lcc}
+\toprule
+Method & Split CIFAR-10 & Split CIFAR-100 \\
+\midrule
+DER++ & $35.4 \pm 1.0$ & $\mathbf{16.4} \pm 0.5$ \\
+ER & $28.9 \pm 1.2$ & $13.4 \pm 0.6$ \\
+PackNet & $30.6 \pm 1.1$ & $11.0 \pm 0.5$ \\
+GPM & $23.1 \pm 2.2$ & $8.2 \pm 0.5$ \\
+TRGP & $17.6 \pm 3.5$ & $7.1 \pm 0.3$ \\
+HAT & $35.4 \pm 1.5$ & $8.8 \pm 0.9$ \\
+EWC & $19.9 \pm 4.5$ & $8.8 \pm 0.3$ \\
+Naive & $17.7 \pm 4.8$ & $7.8 \pm 0.5$ \\
+\midrule
+LS (Ours) & $\mathbf{35.9} \pm 0.3$ & $11.5 \pm 0.8$ \\
+LS-Tuned (Ours) & $32.2 \pm 0.9$ & $13.8 \pm 0.7$ \\
+\bottomrule
+\end{tabular}
+\end{table}

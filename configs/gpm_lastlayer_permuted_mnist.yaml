@@ -1,0 +1,20 @@
+# GPM (last-layer only) on Permuted-MNIST
+# Ablation: restrict GPM to latent layer only (like LatentShift)
+method: gpm_lastlayer
+benchmark: permuted_mnist
+benchmark_args:
+  batch_size: 64
+  num_tasks: 10
+
+encoder: mlp
+input_dim: 784
+hidden_dim: 400
+latent_dim: 256
+
+# GPM-specific
+threshold: 0.99
+num_samples: 300
+
+# Training
+epochs: 10
+lr: 0.01

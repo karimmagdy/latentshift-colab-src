@@ -1,0 +1,22 @@
+# L2P on Permuted-MNIST with ViT-Tiny
+method: l2p
+benchmark: permuted_mnist
+benchmark_args:
+  batch_size: 64
+
+encoder: vit_tiny
+latent_dim: 256
+img_size: 28
+patch_size: 4
+in_channels: 1
+
+# L2P-specific
+pool_size: 10
+prompt_length: 5
+top_k: 5
+freeze_encoder: true
+pull_weight: 0.5
+
+# Training
+epochs: 10
+lr: 0.001

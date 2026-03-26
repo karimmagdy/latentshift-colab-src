@@ -1,0 +1,17 @@
+# PackNet on Split-CIFAR-10
+method: packnet
+benchmark: split_cifar10
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 2
+
+encoder: resnet18
+latent_dim: 256
+
+# PackNet-specific
+prune_ratio: 0.75
+retrain_epochs: 0
+
+# Training
+epochs: 20
+lr: 0.01

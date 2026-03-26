@@ -1,0 +1,18 @@
+# EWC baseline on Split-MNIST
+method: ewc
+benchmark: split_mnist
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 2
+
+encoder: mlp
+input_dim: 784
+hidden_dim: 400
+latent_dim: 256
+
+# EWC-specific
+ewc_lambda: 400.0
+num_fisher_samples: 200
+
+epochs: 10
+lr: 0.01

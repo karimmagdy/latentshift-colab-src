@@ -1,0 +1,18 @@
+# Tuned LatentShift on Split-CIFAR-100 (ablation-guided hyperparams)
+method: latent_shift_tuned
+benchmark: split_cifar100
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 10
+
+encoder: resnet18
+latent_dim: 1024
+
+# Tuned LatentShift-specific
+threshold: 0.999
+num_samples: 500
+lossy: false
+
+# Training
+epochs: 20
+lr: 0.01

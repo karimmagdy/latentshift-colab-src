@@ -1,0 +1,20 @@
+# HAT on Split-MNIST
+method: hat
+benchmark: split_mnist
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 2
+
+encoder: hat_mlp
+input_dim: 784
+hidden_dim: 400
+latent_dim: 256
+num_tasks: 10
+
+# HAT-specific
+s_max: 400.0
+mask_reg_coeff: 0.01
+
+# Training
+epochs: 10
+lr: 0.01

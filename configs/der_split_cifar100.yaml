@@ -1,0 +1,19 @@
+# DER++ on Split-CIFAR-100
+method: der
+benchmark: split_cifar100
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 10
+
+encoder: resnet18
+latent_dim: 256
+
+# DER++-specific
+buffer_size_per_task: 500
+replay_batch_size: 64
+alpha: 1.0
+beta: 1.0
+
+# Training
+epochs: 20
+lr: 0.01

@@ -1,0 +1,18 @@
+# HAT on Permuted-MNIST
+method: hat
+benchmark: permuted_mnist
+benchmark_args:
+  batch_size: 64
+  num_tasks: 10
+
+encoder: hat_mlp
+input_dim: 784
+hidden_dim: 400
+latent_dim: 256
+num_tasks: 10
+
+s_max: 400.0
+mask_reg_coeff: 0.01
+
+epochs: 10
+lr: 0.01

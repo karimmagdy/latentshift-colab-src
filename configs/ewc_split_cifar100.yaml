@@ -1,0 +1,17 @@
+# EWC on Split-CIFAR-100
+method: ewc
+benchmark: split_cifar100
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 10
+
+encoder: resnet18
+latent_dim: 256
+
+# EWC-specific
+ewc_lambda: 400.0
+num_fisher_samples: 200
+
+# Training
+epochs: 20
+lr: 0.01

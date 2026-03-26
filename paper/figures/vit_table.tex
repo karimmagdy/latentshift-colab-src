@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{Architecture generality: ResNet-18 vs ViT-Tiny on Split-CIFAR-100 (mean $\pm$ std over 3 seeds). LatentShift transfers to transformer architectures without modification.}
+\label{tab:vit}
+\small
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Accuracy (\%) $\uparrow$} & \multicolumn{2}{c}{BWT (\%) $\uparrow$} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Method & ResNet-18 & ViT-Tiny & ResNet-18 & ViT-Tiny \\
+\midrule
+DER++ & $63.1 \pm 1.2$ & $52.7 \pm 0.1$ & $-9.3 \pm 1.5$ & $-9.9 \pm 0.4$ \\
+Naive & $36.4 \pm 0.8$ & $27.5 \pm 0.4$ & $-39.9 \pm 0.6$ & $-39.6 \pm 0.4$ \\
+\midrule
+LS (Ours) & $50.7 \pm 2.8$ & $49.6 \pm 0.8$ & $-16.3 \pm 2.4$ & $-6.8 \pm 1.2$ \\
+LS-Tuned (Ours) & $60.2 \pm 0.9$ & $51.0 \pm 0.6$ & $-4.1 \pm 0.5$ & $-12.3 \pm 0.7$ \\
+\bottomrule
+\end{tabular}
+\end{table}

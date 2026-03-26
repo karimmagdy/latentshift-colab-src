@@ -1,0 +1,17 @@
+# HAT on Split-TinyImageNet
+method: hat
+benchmark: split_tinyimagenet
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 20
+
+encoder: hat_resnet18
+small_input: false
+latent_dim: 256
+num_tasks: 10
+
+s_max: 400.0
+mask_reg_coeff: 0.01
+
+epochs: 20
+lr: 0.01

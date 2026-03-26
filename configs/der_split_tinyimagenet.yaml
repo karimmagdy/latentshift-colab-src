@@ -1,0 +1,14 @@
+method: der
+benchmark: split_tinyimagenet
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 20
+encoder: resnet18
+small_input: false
+latent_dim: 256
+buffer_size_per_task: 500
+replay_batch_size: 64
+alpha: 1.0
+beta: 1.0
+epochs: 20
+lr: 0.01

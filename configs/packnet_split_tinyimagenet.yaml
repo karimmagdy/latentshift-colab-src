@@ -1,0 +1,16 @@
+# PackNet on Split-TinyImageNet
+method: packnet
+benchmark: split_tinyimagenet
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 20
+
+encoder: resnet18
+small_input: false
+latent_dim: 256
+
+prune_ratio: 0.75
+retrain_epochs: 0
+
+epochs: 20
+lr: 0.01

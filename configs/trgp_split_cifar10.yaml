@@ -1,0 +1,16 @@
+# TRGP on Split-CIFAR-10
+method: trgp
+benchmark: split_cifar10
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 2
+
+encoder: resnet18
+latent_dim: 256
+
+threshold: 0.99
+num_samples: 300
+
+epochs: 20
+lr: 0.01
+trust_alpha: 0.5

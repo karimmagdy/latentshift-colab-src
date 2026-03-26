@@ -1,0 +1,19 @@
+# LatentShift on Split-CIFAR-100 — Lossy compression (max_archive_rank=64)
+method: latent_shift
+benchmark: split_cifar100
+benchmark_args:
+  batch_size: 64
+  classes_per_task: 10
+
+encoder: resnet18
+latent_dim: 256
+
+# LatentShift-specific
+threshold: 0.99
+num_samples: 300
+lossy: true
+max_archive_rank: 64
+
+# Training
+epochs: 20
+lr: 0.01

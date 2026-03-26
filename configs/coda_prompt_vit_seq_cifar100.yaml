@@ -1,0 +1,21 @@
+# CODA-Prompt on Seq-CIFAR-100 (50 tasks) with ViT-Tiny
+method: coda_prompt
+benchmark: seq_cifar100
+benchmark_args:
+  batch_size: 64
+
+encoder: vit_tiny
+latent_dim: 256
+img_size: 32
+patch_size: 4
+in_channels: 3
+
+# CODA-Prompt-specific
+pool_size: 100
+prompt_length: 8
+ortho_weight: 0.5
+freeze_encoder: true
+
+# Training
+epochs: 20
+lr: 0.001

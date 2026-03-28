@@ -25,6 +25,9 @@ METHODS_TI = {
     "hat": "HAT",
     "er": "ER",
     "der": "DER++",
+    "l2p_vit": "L2P",
+    "dualprompt_vit": "DualPrompt",
+    "coda_prompt_vit": "CODA-P",
     "latent_shift": "LatentShift (Ours)",
     "latent_shift_tuned": "LatentShift-Tuned (Ours)",
 }
@@ -51,6 +54,8 @@ EXPECTED_ENCODER = {
     "split_cifar100": {"resnet18"},
     "split_tinyimagenet": {"resnet18", "hat_resnet18"},
 }
+# ViT-based methods skip encoder validation (they always use vit_tiny)
+VIT_METHODS = {"l2p_vit", "dualprompt_vit", "coda_prompt_vit"}
 
 
 def load_result(method, benchmark, seed, suffix=""):
@@ -64,6 +69,8 @@ def load_result(method, benchmark, seed, suffix=""):
 def validate_encoder(result, method, benchmark, seed):
     """Check that the encoder matches expectations."""
     enc = result.get("config", {}).get("encoder", "unknown")
+    if method in VIT_METHODS:
+        return True  # ViT-based methods use vit_tiny by design
     expected = EXPECTED_ENCODER.get(benchmark, set())
     if expected and enc not in expected:
         print(f"WARNING: {method}/{benchmark}/seed{seed} has encoder={enc}, "
@@ -129,7 +136,8 @@ if warnings:
 # =================================================================
 print("\n=== Generating summary_table.tex ===")
 display_order = ["latent_shift", "latent_shift_tuned", "der", "er",
-                 "gpm", "trgp", "gpm_lastlayer", "ewc", "packnet", "hat", "naive"]
+                 "gpm", "trgp", "gpm_lastlayer", "ewc", "packnet", "hat", "naive",
+                 "l2p_vit", "dualprompt_vit", "coda_prompt_vit"]
 
 lines = []
 lines.append(r"\begin{table*}[t]")
@@ -145,6 +153,9 @@ lines.append(r"\midrule")
 
 for mk in display_order:
     mn = METHODS_TI[mk]
+    if mk == "l2p_vit":
+        lines.append(r"\midrule")
+        lines.append(r"\multicolumn{11}{l}{\textit{Prompt-based (ViT-Tiny backbone)}} \\")
     cells = []
     for bk in BENCHMARKS_TI:
         d = data.get((mk, bk))
@@ -168,11 +179,14 @@ print("  Written to paper/figures/summary_table.tex")
 # =================================================================
 print("\n=== Generating bwt_table.tex ===")
 bwt_display = ["naive", "ewc", "packnet", "hat", "gpm", "gpm_lastlayer",
-               "trgp", "er", "der", "latent_shift", "latent_shift_tuned"]
+               "trgp", "er", "der",
+               "l2p_vit", "dualprompt_vit", "coda_prompt_vit",
+               "latent_shift", "latent_shift_tuned"]
 bwt_names = {
     "naive": "Naive", "ewc": "EWC", "packnet": "PackNet", "hat": "HAT",
     "gpm": "GPM", "gpm_lastlayer": "GPM-LL", "trgp": "TRGP",
     "er": "ER", "der": "DER++",
+    "l2p_vit": "L2P", "dualprompt_vit": "DualPrompt", "coda_prompt_vit": "CODA-P",
     "latent_shift": "LS", "latent_shift_tuned": "LS-Tuned",
 }
 bench_short = {
@@ -233,12 +247,14 @@ print("  Written to paper/figures/bwt_table.tex")
 # =================================================================
 print("\n=== Generating cost_table.tex ===")
 cost_order = ["latent_shift", "latent_shift_tuned", "der", "er", "gpm",
-              "trgp", "gpm_lastlayer", "ewc", "packnet", "hat", "naive"]
+              "trgp", "gpm_lastlayer", "ewc", "packnet", "hat", "naive",
+              "l2p_vit", "dualprompt_vit", "coda_prompt_vit"]
 cost_names = {
     "latent_shift": "LatentShift (Ours)", "latent_shift_tuned": "LatentShift-Tuned (Ours)",
     "der": "DER++", "er": "ER", "gpm": "GPM", "trgp": "TRGP",
     "gpm_lastlayer": "GPM (Last Layer)", "ewc": "EWC", "packnet": "PackNet",
     "hat": "HAT", "naive": "Naive",
+    "l2p_vit": "L2P", "dualprompt_vit": "DualPrompt", "coda_prompt_vit": "CODA-P",
 }
 
 lines = []
@@ -277,6 +293,7 @@ print("\n=== Generating ci_table.tex ===")
 CI_METHODS = {
     "naive": "Naive", "ewc": "EWC", "packnet": "PackNet", "hat": "HAT",
     "gpm": "GPM", "trgp": "TRGP", "er": "ER", "der": "DER++",
+    "l2p_vit": "L2P", "dualprompt_vit": "DualPrompt", "coda_prompt_vit": "CODA-P",
     "latent_shift": "LS (Ours)", "latent_shift_tuned": "LS-Tuned (Ours)",
 }
 CI_BENCHMARKS = ["split_cifar10", "split_cifar100"]
@@ -301,6 +318,7 @@ for bk in CI_BENCHMARKS:
             ci_best[bk] = mk
 
 ci_display_order = ["der", "er", "packnet", "gpm", "trgp", "hat", "ewc", "naive",
+                    "l2p_vit", "dualprompt_vit", "coda_prompt_vit",
                     "latent_shift", "latent_shift_tuned"]
 
 lines = []
@@ -330,7 +348,9 @@ for mk in ci_display_order:
         else:
             cells.append("---")
     sep = ""
-    if mk == "latent_shift":
+    if mk == "l2p_vit":
+        sep = r"\midrule" + "\n"
+    elif mk == "latent_shift":
         sep = r"\midrule" + "\n"
     lines.append(f"{sep}{mn} & {' & '.join(cells)} \\\\")
 

@@ -13,6 +13,9 @@ METHODS = {
     "trgp": "TRGP",
     "er": "ER",
     "der": "DER++",
+    "l2p_vit": "L2P",
+    "dualprompt_vit": "DualPrompt",
+    "coda_prompt_vit": "CODA-P",
     "latent_shift": "LS (Ours)",
     "latent_shift_tuned": "LS-Tuned (Ours)",
 }
@@ -59,6 +62,7 @@ for mk in order:
 # Generate LaTeX
 # Order: DER++, ER, PackNet first (replay/structured), then rest, LS methods last
 display_order = ["der", "er", "packnet", "gpm", "trgp", "hat", "ewc", "naive",
+                 "l2p_vit", "dualprompt_vit", "coda_prompt_vit",
                  "latent_shift", "latent_shift_tuned"]
 
 lines = []
@@ -86,6 +90,8 @@ for mk in display_order:
             cells.append(cell)
         else:
             cells.append("---")
+    if mk == "l2p_vit":
+        lines.append(r"\midrule")
     if mk == "latent_shift":
         lines.append(r"\midrule")
     line = f"{mn} & {cells[0]} & {cells[1]} \\\\"

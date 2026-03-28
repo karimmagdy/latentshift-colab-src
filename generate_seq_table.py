@@ -10,6 +10,9 @@ METHODS = {
     "ewc": "EWC",
     "gpm": "GPM",
     "packnet": "PackNet",
+    "l2p_vit": "L2P",
+    "dualprompt_vit": "DualPrompt",
+    "coda_prompt_vit": "CODA-P",
     "latent_shift": "LS (Ours)",
     "latent_shift_tuned": "LS-Tuned (Ours)",
     "der": "DER++",
@@ -50,7 +53,9 @@ for mk in order:
           f"{d['n_seeds']}")
 
 # LaTeX output
-display_order = ["der", "packnet", "gpm", "ewc", "naive", "latent_shift", "latent_shift_tuned"]
+display_order = ["der", "packnet", "gpm", "ewc", "naive",
+                 "l2p_vit", "dualprompt_vit", "coda_prompt_vit",
+                 "latent_shift", "latent_shift_tuned"]
 
 # Find best per column
 best_acc = max(data.values(), key=lambda d: d["acc_mean"])["acc_mean"]
@@ -88,7 +93,11 @@ for mk in display_order:
     if abs(d["bwt_mean"] - best_bwt) < 0.05:
         bwt_str = f"$\\mathbf{{{d['bwt_mean']:+.1f}}} \\pm {d['bwt_std']:.1f}$"
 
-    sep = r"\midrule" if mk == "latent_shift" else ""
+    sep = ""
+    if mk == "l2p_vit":
+        sep = r"\midrule"
+    elif mk == "latent_shift":
+        sep = r"\midrule"
     if sep:
         lines.append(sep)
     lines.append(f"{mn} & {acc_str} & {fgt_str} & {bwt_str} \\\\")

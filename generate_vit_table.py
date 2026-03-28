@@ -11,6 +11,12 @@ METHODS = {
     "latent_shift": "LS (Ours)",
     "latent_shift_tuned": "LS-Tuned (Ours)",
 }
+# Prompt-based methods (ViT-only, no ResNet counterpart)
+PROMPT_METHODS = {
+    "l2p_vit": "L2P",
+    "dualprompt_vit": "DualPrompt",
+    "coda_prompt_vit": "CODA-P",
+}
 SEEDS = [42, 123, 456]
 BENCHMARK = "split_cifar100"
 
@@ -55,6 +61,16 @@ for mk, mn in METHODS.items():
     v_bwt = f"{vit['bwt_mean']:+.1f} ± {vit['bwt_std']:.1f}" if vit else "---"
     print(f"{mn:<20} {r_acc:<16} {v_acc:<16} {r_bwt:<16} {v_bwt:<16}")
 
+# Prompt-based methods (ViT-only)
+prompt_vit_data = {}
+print(f"\n{'--- Prompt-based (ViT-only) ---':^85}")
+for mk, mn in PROMPT_METHODS.items():
+    vit = load_results(f"{mk}_{BENCHMARK}", SEEDS)
+    prompt_vit_data[mk] = vit
+    v_acc = f"{vit['acc_mean']:.1f} ± {vit['acc_std']:.1f}" if vit else "---"
+    v_bwt = f"{vit['bwt_mean']:+.1f} ± {vit['bwt_std']:.1f}" if vit else "---"
+    print(f"{mn:<20} {'---':<16} {v_acc:<16} {'---':<16} {v_bwt:<16}")
+
 # LaTeX table
 lines = []
 lines.append(r"\begin{table}[t]")
@@ -86,6 +102,17 @@ for mk in display_order:
     if sep:
         lines.append(sep)
     lines.append(f"{mn} & {r_acc} & {v_acc} & {r_bwt} & {v_bwt} \\\\")
+
+# Prompt-based methods (ViT-only)
+lines.append(r"\midrule")
+lines.append(r"\multicolumn{5}{l}{\textit{Prompt-based (ViT-Tiny only)}} \\")
+prompt_display = ["l2p_vit", "dualprompt_vit", "coda_prompt_vit"]
+for mk in prompt_display:
+    mn = PROMPT_METHODS[mk]
+    v = prompt_vit_data[mk]
+    v_acc = f"${v['acc_mean']:.1f} \\pm {v['acc_std']:.1f}$" if v else "---"
+    v_bwt = f"${v['bwt_mean']:+.1f} \\pm {v['bwt_std']:.1f}$" if v else "---"
+    lines.append(f"{mn} & --- & {v_acc} & --- & {v_bwt} \\\\")
 
 lines.append(r"\bottomrule")
 lines.append(r"\end{tabular}")

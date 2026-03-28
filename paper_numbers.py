@@ -12,6 +12,9 @@ methods = {
     "gpm": "GPM",
     "gpm_lastlayer": "GPM-LL",
     "trgp": "TRGP",
+    "l2p_vit": "L2P",
+    "dualprompt_vit": "DualPrompt",
+    "coda_prompt_vit": "CODA-P",
 }
 benchmarks = ["split_mnist", "permuted_mnist", "split_cifar10", "split_cifar100", "split_tinyimagenet"]
 seeds = [42, 123, 456]

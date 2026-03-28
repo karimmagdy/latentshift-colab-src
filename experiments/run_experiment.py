@@ -342,8 +342,14 @@ def main():
     suffix = "_ci" if args.class_incremental else ""
     # Embed encoder name for non-default architectures to avoid filename collisions
     default_encoders = {"resnet18", "hat_resnet18", "mlp"}
+    encoder_file_tag = {"vit_tiny": "vit"}  # keep backward-compat filenames
     encoder_name = cfg.get("encoder", "")
-    encoder_tag = f"_{encoder_name}" if encoder_name and encoder_name not in default_encoders else ""
+    if encoder_name in encoder_file_tag:
+        encoder_tag = f"_{encoder_file_tag[encoder_name]}"
+    elif encoder_name and encoder_name not in default_encoders:
+        encoder_tag = f"_{encoder_name}"
+    else:
+        encoder_tag = ""
     out_path = output_dir / f"{cfg['method']}{encoder_tag}_{cfg['benchmark']}_seed{args.seed}{suffix}.json"
     with open(out_path, "w") as f:
         json.dump(results, f, indent=2)

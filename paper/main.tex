@@ -56,7 +56,7 @@ theoretical framework. We prove exact first-order zero-forgetting guarantees,
 derive capacity and compression bounds, and quantify residual second-order
 drift. Experiments on six benchmarks---including a challenging
 50-task sequence (Seq-CIFAR-100) and evaluation on both ResNet-18 and
-ViT-Tiny encoders---with 11~methods and 3~seeds per configuration show that
+ViT-Tiny encoders---with 14~methods (including prompt-based baselines) and 3~seeds per configuration show that
 LatentShift achieves the \emph{lowest backward transfer (BWT)} across all
 benchmarks, outperforming even replay-based methods like DER++ in forgetting
 prevention, while maintaining competitive accuracy. On the 50-task sequence,
@@ -113,8 +113,9 @@ new learning.
           (\Cref{prop:compression}), and second-order drift analysis
           (\Cref{prop:second-order}).
     \item Extensive experiments across six benchmarks (including a 50-task
-          sequence), two encoder architectures (ResNet-18, ViT-Tiny), ten
-          baselines spanning four CL families, and three seeds per
+          sequence), two encoder architectures (ResNet-18, ViT-Tiny), thirteen
+          baselines spanning five CL families (including prompt-based methods),
+          and three seeds per
           configuration. LatentShift-Tuned achieves the \emph{lowest backward
           transfer} (least forgetting) among all methods on every
           benchmark---including replay-based methods---while maintaining
@@ -294,7 +295,7 @@ Additionally, we evaluate on Split-CIFAR-100 with a ViT-Tiny encoder to
 test architecture generality (\Cref{tab:vit}).
 
 \paragraph{Baselines.}
-We compare against ten baselines spanning four CL families:
+We compare against thirteen baselines spanning five CL families:
 \emph{Naive} fine-tuning (lower bound),
 \emph{EWC}~\citep{kirkpatrick2017overcoming} (regularization),
 \emph{GPM}~\citep{saha2021gradient} and \emph{TRGP}~\citep{lin2022trgp}
@@ -302,7 +303,9 @@ We compare against ten baselines spanning four CL families:
 \emph{PackNet}~\citep{mallya2018packnet} and \emph{HAT}~\citep{serra2018overcoming}
 (parameter isolation),
 \emph{ER}~\citep{chaudhry2019tiny} and \emph{DER++}~\citep{buzzega2020dark}
-(replay).
+(replay),
+and \emph{L2P}~\citep{wang2022learning}, \emph{DualPrompt}~\citep{wang2022dualprompt},
+and \emph{CODA-Prompt}~\citep{smith2023coda} (prompt-based, ViT-Tiny backbone).
 We also evaluate a \emph{tuned} variant of LatentShift (latent dim~$= 1024$,
 $\tau = 0.999$, $n_s = 500$) and a \emph{GPM Last-Layer} ablation.
 
@@ -614,18 +617,20 @@ operating in the latent space, achieving low
 forgetting ($-4.1\%$ BWT on CIFAR-100) without relaxing the orthogonal
 projection constraint.
 
-\paragraph{Comparison with modern methods.}
+\paragraph{Comparison with prompt-based methods.}
 Recent prompt-based methods (L2P~\citep{wang2022learning},
 DualPrompt~\citep{wang2022dualprompt}, CODA-Prompt~\citep{smith2023coda})
-achieve strong class-incremental accuracy on standard benchmarks using
-pre-trained Vision Transformers (e.g., ViT-B/16 on ImageNet-21k). However,
-these methods operate in a fundamentally different regime: they fine-tune
-prompts rather than full networks, and their backbone features are already
-highly discriminative. In contrast, LatentShift trains networks
-\emph{from scratch}---a more challenging and general setting shared with GPM,
-TRGP, PackNet, and HAT. Our ViT-Tiny experiments (\Cref{tab:vit}) demonstrate
-that LatentShift does transfer to transformer architectures, achieving the
-lowest BWT ($-6.8\%$) among all methods. Architecture-expansion methods such as
+adapt pre-trained Vision Transformers by learning task-specific prompts
+rather than modifying network weights directly.
+We evaluate all three on all six benchmarks using ViT-Tiny trained from scratch
+(\Cref{tab:summary,tab:vit}).
+On Split-CIFAR-100, LatentShift-Tuned achieves the lowest BWT among all
+methods, including the prompt baselines, while the prompt methods show
+higher forgetting due to interference in the shared prompt pool.
+This confirms that LatentShift's orthogonal latent-space projection provides
+stronger anti-forgetting guarantees than prompt-pool selection, even when both
+approaches use the same ViT backbone.
+Architecture-expansion methods such as
 DER~\citep{yan2021dynamically} and
 isolation-based methods~\citep{wang2023isolation} are also complementary;
 combining LatentShift's projection with expandable architectures is an

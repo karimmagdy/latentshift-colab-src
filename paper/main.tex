@@ -1,8 +1,8 @@
-% LatentShift: Solving Catastrophic Forgetting via Hilbert-Inspired Latent Shifting
+% LatentShift: Mitigating Catastrophic Forgetting via Hilbert-Inspired Latent Shifting
 % Main paper file — compile with: pdflatex main && bibtex main && pdflatex main && pdflatex main
 
 \documentclass{article}
-\usepackage{neurips_2025}
+\usepackage{neurips_2026}
 
 % ---------------------------------------------------------------
 % Packages
@@ -29,7 +29,7 @@
 \newcommand{\col}{\mathrm{col}}
 
 % ---------------------------------------------------------------
-\title{LatentShift: Solving Catastrophic Forgetting\\via Hilbert-Inspired Latent Shifting}
+\title{LatentShift: Mitigating Catastrophic Forgetting\\via Hilbert-Inspired Latent Shifting}
 
 \author{
   Karim Magdy$^{1(\boxtimes)}$\thanks{Corresponding author.} \\
@@ -57,9 +57,8 @@
 \begin{abstract}
 Continual learning methods must balance the stability--plasticity trade-off:
 retaining knowledge of previous tasks while learning new ones.
-We propose \textbf{LatentShift}, a \emph{replay-free} method inspired by
-Hilbert's Hotel paradox that protects learned representations via orthogonal
-projection in a shared latent space. After each task, LatentShift identifies the
+We propose \textbf{LatentShift}, a \emph{replay-free} method that protects
+learned representations via orthogonal projection in a shared latent space. After each task, LatentShift identifies the
 subspace of important latent directions through SVD, archives them into an
 orthonormal basis, and projects future gradients onto the complementary free
 subspace. Unlike per-layer approaches such as GPM, LatentShift operates
@@ -70,8 +69,7 @@ derive capacity and compression bounds, and quantify residual second-order
 drift. Experiments on six benchmarks---including a challenging
 50-task sequence (Seq-CIFAR-100) and evaluation on both ResNet-18 and
 ViT-Tiny encoders---with 14~methods (including prompt-based baselines) and 3~seeds per configuration show that
-LatentShift achieves the \emph{lowest backward transfer (BWT)} across all
-benchmarks, outperforming even replay-based methods like DER++ in forgetting
+LatentShift achieves consistently among the \emph{lowest backward transfer (BWT)} across benchmarks, particularly on challenging datasets such as Split-CIFAR-100 and Split-TinyImageNet, outperforming even replay-based methods like DER++ in forgetting
 prevention, while maintaining competitive accuracy. On the 50-task sequence,
 LatentShift-Tuned achieves $-3.8\%$ BWT (vs.\ DER++ $-5.2\%$), and transfers
 to Vision Transformers without modification. All results are obtained without
@@ -111,9 +109,13 @@ per-layer feature covariance matrices.
 We propose \textbf{LatentShift}, a replay-free continual learning method that
 applies the projection principle not per-layer, but in the holistic latent
 representation space---the bottleneck layer between encoder and decoder.
-Drawing an analogy with Hilbert's Hotel, LatentShift ``shifts'' old
-representations into an archived subspace, freeing orthogonal dimensions for
-new learning.
+Drawing loose inspiration from Hilbert's Hotel---where an infinite hotel
+accommodates new guests by shifting existing ones---LatentShift archives
+old task representations into a protected subspace via SVD and frees
+orthogonal dimensions for new learning. We emphasize that this is a
+motivational metaphor rather than a mechanistic description: the actual
+method relies on orthogonal projection in a finite-dimensional latent space,
+and the capacity is bounded (\Cref{prop:capacity}).
 
 \paragraph{Contributions.}
 \begin{enumerate}
@@ -129,9 +131,10 @@ new learning.
           sequence), two encoder architectures (ResNet-18, ViT-Tiny), thirteen
           baselines spanning five CL families (including prompt-based methods),
           and three seeds per
-          configuration. LatentShift-Tuned achieves the \emph{lowest backward
-          transfer} (least forgetting) among all methods on every
-          benchmark---including replay-based methods---while maintaining
+          configuration. LatentShift-Tuned achieves consistently among the \emph{lowest backward
+          transfer} (least forgetting) across benchmarks---particularly on
+          challenging datasets like CIFAR-100 and TinyImageNet, where it
+          outperforms even replay-based methods---while maintaining
           competitive accuracy.
     \item Empirical validation of the capacity bound showing how latent
           dimension controls the accuracy--capacity trade-off, motivating
@@ -271,19 +274,17 @@ After training on each task~$t$:
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Hilbert's Hotel Analogy}
-
-The method draws inspiration from Hilbert's Grand Hotel paradox: a fully
-occupied hotel with infinitely many rooms can still accommodate new guests
-by shifting existing guests from room~$n$ to room~$2n$, freeing all
-odd-numbered rooms.
-
-In LatentShift, ``rooms'' are latent dimensions, ``guests'' are task
-representations, and the ``shift operator'' is the SVD + orthogonal
-projection that moves old task representations into the archived subspace,
-freeing complementary dimensions for new tasks. Unlike Hilbert's Hotel
-(with countably infinite rooms), our latent space has finite dimension~$d$,
-leading to the capacity bound in \Cref{prop:capacity}.
+\paragraph{Motivational analogy.}
+The name ``LatentShift'' draws loose inspiration from Hilbert's Grand Hotel
+paradox, where an infinite hotel accommodates new guests by shifting existing
+ones. In our finite-dimensional setting, ``rooms'' correspond to latent
+dimensions and ``guests'' to task representations; the SVD-based archival
+followed by orthogonal projection plays the role of the shift operator.
+However, unlike Hilbert's Hotel (which has countably infinite rooms), our
+latent space has finite dimension~$d$, so capacity is bounded
+(\Cref{prop:capacity}). The analogy is purely motivational---the method's
+guarantees follow from orthogonal projection, not from any infinite-capacity
+argument.
 
 % ---------------------------------------------------------------
 \input{theory}
@@ -340,14 +341,20 @@ across all benchmarks, and \Cref{tab:bwt} reports Backward Transfer
 (BWT)---the standard metric for quantifying forgetting in continual
 learning~\citep{lopez2017gradient}.
 
-\paragraph{Lowest forgetting across all benchmarks.}
-The most striking result is that LatentShift-Tuned achieves the \emph{lowest
-BWT} (least forgetting) on every benchmark, \emph{including against
-replay-based methods}. On CIFAR-100, LS-Tuned's BWT of $-4.1\%$ is less than
+\paragraph{Strong forgetting prevention across benchmarks.}
+LatentShift-Tuned achieves consistently among the \emph{lowest
+BWT} (least forgetting) across benchmarks, particularly on the more
+challenging datasets. On Split-CIFAR-100, LS-Tuned's BWT of $-4.1\%$ is less than
 half that of DER++ ($-9.3\%$), despite DER++ using a replay buffer.
 On TinyImageNet, the gap widens further: $-4.4\%$ vs.\ $-12.9\%$.
-This confirms that latent-space orthogonal projection provides stronger
-forgetting prevention than logit distillation combined with replay.
+On Split-MNIST and Permuted-MNIST, HAT achieves BWT~$= 0.0\%$ through hard
+attention masks, while LS-Tuned achieves $-0.3\%$ and $-0.5\%$ respectively---both
+near-zero. On Split-CIFAR-10, PackNet achieves positive transfer ($+4.4\%$ BWT)
+due to its pruning-based isolation, while LS-Tuned achieves $-4.2\%$.
+On the more challenging CIFAR-100 and TinyImageNet benchmarks, LS-Tuned
+achieves the lowest BWT of any method, confirming that latent-space
+orthogonal projection provides particularly strong forgetting prevention
+on complex, longer task sequences.
 
 \paragraph{Competitive accuracy without replay.}
 While DER++ achieves the highest accuracy on most benchmarks (due to its
@@ -466,9 +473,12 @@ embed dim 192, patch size 4) trained from scratch on Split-CIFAR-100.
 \Cref{tab:vit} compares ViT-Tiny and ResNet-18 results.
 
 LatentShift transfers to transformers without any modification: LS achieves
-$49.6\%$ accuracy with $-6.8\%$ BWT on ViT-Tiny, and LS-Tuned reaches
-$51.0\%$ with $-12.3\%$ BWT. DER++ ($52.7\%$, $-9.9\%$ BWT) leads in
-accuracy but LS achieves the lowest forgetting among all ViT methods.
+$49.6\%$ accuracy with $-6.8\%$ BWT on ViT-Tiny---the lowest forgetting
+among all ViT methods---while LS-Tuned reaches $51.0\%$ accuracy with
+$-12.3\%$ BWT. The tuned variant's higher forgetting on ViT-Tiny (compared to
+DER++'s $-9.9\%$ BWT) reflects that the expanded latent dimension ($d=1024$)
+may over-parameterize the ViT-Tiny bottleneck, suggesting that
+architecture-specific tuning of the latent dimension is beneficial.
 The key insight is that LatentShift's latent-space projection is
 \emph{architecture-agnostic}: it operates on the bottleneck representation
 regardless of whether the upstream encoder is a CNN or a transformer.
@@ -494,9 +504,9 @@ reasonable but imperfect proxy.
 \subsection{Computational Cost}
 
 \Cref{tab:cost} reports wall-clock training times. LatentShift is among the
-most efficient methods: 29s on MNIST, 1668s on CIFAR-10, and 2292s on
-CIFAR-100. In contrast, GPM requires 35,431s on CIFAR-100 due to its
-per-layer SVD operations, and HAT requires 17,914s on TinyImageNet. The
+most efficient methods: 46s on MNIST, 1,197s on CIFAR-10, and 2,244s on
+CIFAR-100. In contrast, GPM requires 13,073s on CIFAR-100 due to its
+per-layer SVD operations, and HAT requires 23,478s on TinyImageNet. The
 computational advantage stems from LatentShift operating on a single
 $d$-dimensional latent space rather than across all network layers.
 
@@ -578,12 +588,15 @@ low-variance archived directions when the free subspace is nearing exhaustion.
 
 \paragraph{Forgetting prevention without replay.}
 The central empirical finding of this work is that LatentShift-Tuned achieves
-the lowest backward transfer (BWT) across all six benchmarks (\Cref{tab:bwt}),
-surpassing even replay-based methods that store past data. On CIFAR-100,
+consistently among the lowest backward transfer (BWT) across benchmarks (\Cref{tab:bwt}),
+particularly on the challenging CIFAR-100 and TinyImageNet datasets where it
+surpasses all methods including replay-based ones. On CIFAR-100,
 LS-Tuned's BWT of $-4.1\%$ is less than half that of DER++ ($-9.3\%$); on
 TinyImageNet, the ratio is roughly one-third ($-4.4\%$ vs.\ $-12.9\%$).
 On the 50-task Seq-CIFAR-100, LS-Tuned achieves $-3.8\%$ BWT vs.\ $-5.2\%$
-for DER++. This validates the theoretical prediction: orthogonal projection in
+for DER++. On simpler benchmarks (Split-MNIST, Permuted-MNIST), HAT achieves
+zero forgetting through hard attention masks, while LS-Tuned's near-zero BWT
+($-0.3\%$, $-0.5\%$) remains competitive. This validates the theoretical prediction: orthogonal projection in
 the latent space provides exact first-order zero-forgetting guarantees
 (\Cref{prop:zero-forgetting}), and the small residual drift stems from
 second-order effects (\Cref{prop:second-order}).
@@ -611,7 +624,7 @@ forgetting--accuracy trade-off with formal guarantees.
 \paragraph{Why holistic beats per-layer.}
 Existing gradient projection methods (GPM, TRGP) operate per-layer, requiring
 separate SVD and subspace maintenance for each layer. This introduces
-computational overhead (GPM: 35,431s on CIFAR-100 vs.\ LS: 2,292s), fragments
+computational overhead (GPM: 13,073s on CIFAR-100 vs.\ LS: 2,244s), fragments
 the capacity analysis, and couples the method to specific architectures.
 LatentShift's latent-space projection achieves lower forgetting than both GPM
 (BWT: $-30.9\%$ on CIFAR-100) and TRGP ($-37.2\%$) while being an order of magnitude
@@ -637,9 +650,10 @@ adapt pre-trained Vision Transformers by learning task-specific prompts
 rather than modifying network weights directly.
 We evaluate all three on all six benchmarks using ViT-Tiny trained from scratch
 (\Cref{tab:summary,tab:vit}).
-On Split-CIFAR-100, LatentShift-Tuned achieves the lowest BWT among all
-methods, including the prompt baselines, while the prompt methods show
-higher forgetting due to interference in the shared prompt pool.
+On Split-CIFAR-100, LatentShift-Tuned achieves lower BWT ($-4.1\%$) than all
+prompt baselines (L2P $-10.0\%$, DualPrompt $-19.4\%$, CODA-P $-8.7\%$),
+while the prompt methods show higher forgetting due to interference in the
+shared prompt pool.
 This confirms that LatentShift's orthogonal latent-space projection provides
 stronger anti-forgetting guarantees than prompt-pool selection, even when both
 approaches use the same ViT backbone.
@@ -691,18 +705,45 @@ avenues.
 \label{sec:conclusion}
 
 We introduced LatentShift, a replay-free continual learning method that
-prevents catastrophic forgetting by orthogonal projection in a shared latent
-space. Inspired by Hilbert's Hotel paradox, LatentShift archives task
-representations via SVD and frees complementary directions for new learning.
+mitigates catastrophic forgetting by orthogonal projection in a shared latent
+space. LatentShift archives task representations via SVD and frees
+complementary directions for new learning.
 We provided five theoretical propositions with full proofs covering
 zero-forgetting, capacity, isometry, compression, and second-order bounds.
 Extensive experiments on six benchmarks---including a 50-task sequence and
 ViT-Tiny evaluation---with ten baselines demonstrate that LatentShift-Tuned
-achieves the lowest backward transfer (least forgetting) across all
-benchmarks, outperforming replay-based methods including DER++, while
+achieves consistently among the lowest backward transfer (least forgetting)
+across benchmarks, outperforming replay-based methods on challenging
+datasets like CIFAR-100 and TinyImageNet, while
 maintaining competitive accuracy and low computational cost. The method
 transfers to Vision Transformers without modification and scales to 50-task
 sequences with graceful degradation, all without storing any past data.
+
+% ---------------------------------------------------------------
+\section{Broader Impact and Availability}
+\label{sec:broader_impact}
+
+\paragraph{Broader impact.}
+Mitigating catastrophic forgetting has significant implications for deployed
+continual learning systems. On the positive side, methods like LatentShift
+enable models to accumulate knowledge over time without requiring access to
+previous training data, which is beneficial for privacy-sensitive domains
+(e.g., medical imaging, personal assistants) and resource-constrained edge
+deployments where storing past data is infeasible. However, improved
+forgetting prevention also enables longer autonomous operation with less
+human oversight, which may be undesirable in safety-critical applications
+where periodic retraining serves as a natural checkpoint for human review.
+We encourage practitioners to maintain appropriate monitoring and evaluation
+protocols even when deploying models with strong forgetting prevention.
+From a computational perspective, LatentShift's efficiency (operating on a
+single latent space rather than per-layer) reduces the energy cost of
+continual learning relative to methods like GPM, though any additional
+training beyond a single model still incurs environmental cost.
+
+\paragraph{Code and data availability.}
+Code and experiment configurations will be released upon acceptance.
+All datasets used (MNIST, CIFAR-10, CIFAR-100, Tiny ImageNet) are publicly
+available benchmarks.
 
 % ---------------------------------------------------------------
 \bibliography{references}

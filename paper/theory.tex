@@ -75,6 +75,39 @@ the projected gradient $g'$ is orthogonal to the archive subspace.
 We quantify this residual in Proposition~\ref{prop:second-order}.
 \end{remark}
 
+\begin{remark}[Latent-to-Parameter Gap]
+\label{rem:latent-to-parameter}
+Proposition~\ref{prop:zero-forgetting} establishes orthogonality in the
+latent space: $z^\top g' = 0$. To connect this to parameter space, note
+that the encoder $f_\theta$ maps parameters $\theta$ to latent
+representations $z = f_\theta(x)$. Let $J_\theta = \partial f_\theta(x) /
+\partial \theta$ denote the Jacobian of the encoder with respect to
+parameters (note: this is distinct from $J_z$ used in the proof above,
+which informally denotes the Jacobian of the encoder output change with
+respect to latent-space perturbations). If $g' = Pg$ is the projected
+gradient in latent space, then by the chain rule, the effective parameter
+gradient becomes:
+\begin{equation}
+    \frac{\partial \mathcal{L}}{\partial \theta}\bigg|_{\text{projected}}
+    = J_\theta^\top \, g'
+    = J_\theta^\top \, P \, g
+    \label{eq:latent-to-param}
+\end{equation}
+Since $g' = Pg \in \mathrm{null}(A^\top)$ by construction, the parameter
+update $\Delta \theta = -\eta \, J_\theta^\top g'$ inherits the
+orthogonality constraint: for any archived representation
+$z = A\alpha \in \mathrm{col}(A)$, the first-order change in $z$ is
+$\Delta z \approx J_\theta \, \Delta \theta = -\eta \, J_\theta J_\theta^\top g'$.
+The component of $\Delta z$ along the archive is
+$A^\top \Delta z = -\eta \, A^\top J_\theta J_\theta^\top g'$, which
+vanishes to first order when $g' \in \mathrm{null}(A^\top)$ and
+$J_\theta J_\theta^\top$ preserves this null-space structure (as holds
+exactly when $J_\theta$ commutes with $P$, and approximately otherwise).
+This is a \emph{first-order} guarantee; the second-order remainder is
+captured by Proposition~\ref{prop:second-order}, which bounds the
+cumulative drift from nonlinear effects.
+\end{remark}
+
 \subsection{Proposition 2: Capacity Bound}
 
 \begin{proposition}[Capacity Bound]
